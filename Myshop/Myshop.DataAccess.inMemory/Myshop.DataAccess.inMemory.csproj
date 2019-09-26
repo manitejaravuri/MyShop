@@ -42,9 +42,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="inMemoryRepositary.cs" />
     <Compile Include="productCategoryRepositary.cs" />
     <Compile Include="productRepositary.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="T.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Myshop.Core\Myshop.Core.csproj">
