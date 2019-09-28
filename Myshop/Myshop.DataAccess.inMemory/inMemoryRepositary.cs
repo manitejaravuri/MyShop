@@ -1,4 +1,5 @@
-﻿using Myshop.Core.Models;
+﻿using Myshop.core.contracts;
+using Myshop.Core.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Myshop.DataAccess.inMemory
 {
-   public class inMemoryRepositary<T> where T :BaseEntity
+   public class inMemoryRepositary<T> : IRepositary<T> where T :BaseEntity
     {
         ObjectCache cache =  MemoryCache.Default;
         List<T> items;
@@ -29,6 +30,7 @@ namespace Myshop.DataAccess.inMemory
         {
             cache[className] = items;
         }
+       
         public void Insert(T t)
         {
             items.Add(t);

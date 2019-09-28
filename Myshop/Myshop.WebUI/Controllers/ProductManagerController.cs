@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-
+using Myshop.core.contracts;
 using Myshop.Core.Models;
 using Myshop.Core.ViewModels;
 using Myshop.DataAccess.inMemory;
@@ -12,34 +12,35 @@ namespace Myshop.WebUI.Controllers
 {
     public class ProductManagerController : Controller
     {
-        inMemoryRepositary<product> context;
-        inMemoryRepositary<productCategory> productcategories;
+        IRepositary<productCategory> context;
+        IRepositary<productCategory> productcategories;
         
        
 
 
-        public ProductManagerController()
+        public ProductManagerController(IRepositary<productCategory> productcontext, IRepositary<productCategory> productCategorycontext)
         {
-            context = new inMemoryRepositary<product>();
-            productcategories = new inMemoryRepositary<productCategory>();
+            context = productcontext;
+            //context = new inMemoryRepositary<product>();
+            productcategories = productCategorycontext;
         }
         // GET: ProductManager
         public ActionResult Index()
         {
-            List<product> products = context.collection().ToList();
+            List<productCategory> products = context.collection().ToList();
             return View(products);
         }
         public ActionResult create()
         {
             ProductManagerViewModel viewModel = new ProductManagerViewModel();
-            viewModel.product = new product();
-            viewModel.productCategories = productcategories.Collection();
+            viewModel.product = new productCategory();
+            viewModel.productCategories = productcategories.collection();
            
 
             return View(viewModel);
         }
         [HttpPost]
-        public ActionResult create(product product)
+        public ActionResult create(productCategory product)
         {
             if(!ModelState.IsValid)
             {
@@ -47,7 +48,7 @@ namespace Myshop.WebUI.Controllers
             }
             else
             {
-                context.insert(product);
+                context.Insert(product);
 
                 context.commit();
 
@@ -56,7 +57,7 @@ namespace Myshop.WebUI.Controllers
         }
         public ActionResult Edit(string id)
         {
-            product product = context.find(id);
+            productCategory product = context.Find(id);
 
             if(product==null)
             {
@@ -66,14 +67,14 @@ namespace Myshop.WebUI.Controllers
             {
                 ProductManagerViewModel viewModel = new ProductManagerViewModel();
                 viewModel.product = product;
-                viewModel.productCategories = productcategories.Collection();
+                viewModel.productCategories = productcategories.collection();
                 return View(viewModel);
             }
         }
         [HttpPost]
-        public ActionResult Edit(product product,string id)
+        public ActionResult Edit(productCategory product,string id)
         {
-            product productToEdit = context.find(id);
+            productCategory productToEdit = context.Find(id);
 
             if(productToEdit==null)
             {
@@ -85,11 +86,11 @@ namespace Myshop.WebUI.Controllers
                 {
                     return View(product);
                 }
-                productToEdit.categeory = product.categeory;
-                productToEdit.Description = product.Description;
-                productToEdit.image = product.image;
-                productToEdit.Name = product.Name;
-                productToEdit.price = product.price;
+                productToEdit.Category = product.Category;
+                //productToEdit.Description = product.Description;
+                //productToEdit.image = product.image;
+                //productToEdit.Name = product.Name;
+                //productToEdit.price = product.price;
 
                 context.commit();
 
@@ -98,7 +99,7 @@ namespace Myshop.WebUI.Controllers
         }
         public ActionResult Delete(string id)
         {
-            product productToDelete = context.find(id);
+            productCategory productToDelete = context.Find(id);
 
             if(productToDelete==null)
             {
@@ -113,7 +114,7 @@ namespace Myshop.WebUI.Controllers
         [ActionName("Delete")]
         public ActionResult ConfirmDelete(string id)
         {
-            product productToDelete = context.find(id);
+            productCategory productToDelete = context.Find(id);
 
             if(productToDelete==null)
             {
