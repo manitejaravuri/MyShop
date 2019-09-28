@@ -9,13 +9,13 @@ using System.Threading.Tasks;
 
 namespace Myshop.DataAccess.inMemory
 {
-   public class inMemoryRepositary<T> : IRepositary<T> where T :BaseEntity
+   public class SqLRepositary<T> : IRepositary<T> where T :BaseEntity
     {
         ObjectCache cache =  MemoryCache.Default;
         List<T> items;
         string className;
 
-        public inMemoryRepositary()
+        public SqLRepositary()
         {
             className = typeof(T).Name;
 
